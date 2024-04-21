@@ -4,7 +4,7 @@ node_modules
 logs
 *.log
 
-.DS_Store
+**/.DS_Store
 .fleet
 .idea
 
