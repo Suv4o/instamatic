@@ -1,5 +1,10 @@
-import { getRandomImage } from "./utils";
+import { loadRandomImage } from "./utils";
+import { ImageDescriber } from "./agents/imageDescriber";
 
-(async () => {
-    console.log("Random image:", await getRandomImage());
-})();
+async function main() {
+    const imageDescriber = new ImageDescriber(await loadRandomImage());
+
+    console.log(await imageDescriber.describe());
+}
+
+main();
