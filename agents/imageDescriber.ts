@@ -102,6 +102,9 @@ export class ImageDescriber {
         imageDescriptions.push(await this.nlpconnectVitGpt2ImageCaptioningModel());
         imageDescriptions.push(await this.microsoftGitLargeCoco());
 
-        return imageDescriptions.map((description) => `- ${description}`).join("\n");
+        return imageDescriptions
+            .filter((description) => description.trim() !== "")
+            .map((description) => `- ${description}`)
+            .join("\n");
     }
 }
