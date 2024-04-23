@@ -1,6 +1,7 @@
 import { loadRandomImage } from "./utils";
 import { ImageDescriber } from "./agents/imageDescriber";
 import { ImageClassifier } from "./agents/imageClassifier";
+import { ImageZeroShotClassifier } from "./agents/imageZeroShotClassifier";
 
 async function main() {
     const imageData = await loadRandomImage();
@@ -10,7 +11,11 @@ async function main() {
 
     // Run Image Classifier Agent
     const imageClassifier = new ImageClassifier(imageData);
-    console.log(await imageClassifier.classify());
+    const labels = await imageClassifier.classify();
+
+    // Run Image Zero Shot Classifier Agent
+    const imageZeroShotClassifier = new ImageZeroShotClassifier(imageData, labels);
+    console.log(await imageZeroShotClassifier.analyser());
 }
 
 main();
