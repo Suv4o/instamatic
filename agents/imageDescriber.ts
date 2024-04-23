@@ -21,7 +21,7 @@ export class ImageDescriber {
 
             if (!response.ok) {
                 // Try again after 10 seconds because the model might be initializing
-                delay(10000);
+                delay(30000);
                 response = await this.huggingFaceFetch(
                     "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large"
                 );
@@ -49,7 +49,7 @@ export class ImageDescriber {
 
             if (!response.ok) {
                 // Try again after 10 seconds because the model might be initializing
-                delay(10000);
+                delay(30000);
                 response = await this.huggingFaceFetch(
                     "https://api-inference.huggingface.co/models/nlpconnect/vit-gpt2-image-captioning"
                 );
@@ -77,7 +77,7 @@ export class ImageDescriber {
 
             if (!response.ok) {
                 // Try again after 10 seconds because the model might be initializing
-                delay(10000);
+                delay(30000);
                 response = await this.huggingFaceFetch(
                     "https://api-inference.huggingface.co/models/microsoft/git-large-coco"
                 );
