@@ -1,29 +1,24 @@
 import { ImageToTextResponse } from "../types";
+import { huggingFaceFetch } from "../utils";
 import { delay } from "../utils";
 
 export class ImageDescriber {
     constructor(private readonly imageData: Buffer = imageData) {}
 
-    private async huggingFaceFetch(url: string) {
-        return await fetch(url, {
-            headers: { Authorization: `Bearer ${process.env.HUGGING_FACE_TOKEN}` },
-            method: "POST",
-            body: this.imageData,
-        });
-    }
-
     private async salesforceBlipImageCaptioningLarge() {
         try {
             let response: Response;
-            response = await this.huggingFaceFetch(
-                "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large"
+            response = await huggingFaceFetch(
+                "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large",
+                this.imageData
             );
 
             if (!response.ok) {
-                // Try again after 10 seconds because the model might be initializing
-                delay(30000);
-                response = await this.huggingFaceFetch(
-                    "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large"
+                // Try again after 60 seconds because the model might be initializing
+                delay(60000);
+                response = await huggingFaceFetch(
+                    "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large",
+                    this.imageData
                 );
                 if (!response.ok) {
                     const resError = await response.json();
@@ -43,15 +38,17 @@ export class ImageDescriber {
     private async nlpconnectVitGpt2ImageCaptioningModel() {
         try {
             let response: Response;
-            response = await this.huggingFaceFetch(
-                "https://api-inference.huggingface.co/models/nlpconnect/vit-gpt2-image-captioning"
+            response = await huggingFaceFetch(
+                "https://api-inference.huggingface.co/models/nlpconnect/vit-gpt2-image-captioning",
+                this.imageData
             );
 
             if (!response.ok) {
-                // Try again after 10 seconds because the model might be initializing
-                delay(30000);
-                response = await this.huggingFaceFetch(
-                    "https://api-inference.huggingface.co/models/nlpconnect/vit-gpt2-image-captioning"
+                // Try again after 60 seconds because the model might be initializing
+                delay(60000);
+                response = await huggingFaceFetch(
+                    "https://api-inference.huggingface.co/models/nlpconnect/vit-gpt2-image-captioning",
+                    this.imageData
                 );
                 if (!response.ok) {
                     const resError = await response.json();
@@ -71,15 +68,17 @@ export class ImageDescriber {
     private async microsoftGitLargeCoco() {
         try {
             let response: Response;
-            response = await this.huggingFaceFetch(
-                "https://api-inference.huggingface.co/models/microsoft/git-large-coco"
+            response = await huggingFaceFetch(
+                "https://api-inference.huggingface.co/models/microsoft/git-large-coco",
+                this.imageData
             );
 
             if (!response.ok) {
-                // Try again after 10 seconds because the model might be initializing
-                delay(30000);
-                response = await this.huggingFaceFetch(
-                    "https://api-inference.huggingface.co/models/microsoft/git-large-coco"
+                // Try again after 60 seconds because the model might be initializing
+                delay(60000);
+                response = await huggingFaceFetch(
+                    "https://api-inference.huggingface.co/models/microsoft/git-large-coco",
+                    this.imageData
                 );
                 if (!response.ok) {
                     const resError = await response.json();

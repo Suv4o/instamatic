@@ -14,6 +14,14 @@ export async function getRandomImageName() {
     }
 }
 
+export async function huggingFaceFetch(url: string, imageData: Buffer) {
+    return await fetch(url, {
+        headers: { Authorization: `Bearer ${process.env.HUGGING_FACE_TOKEN}` },
+        method: "POST",
+        body: imageData,
+    });
+}
+
 export async function loadRandomImage() {
     return await fs.readFile(path.join(__dirname, "..", "images", await getRandomImageName()));
 }
