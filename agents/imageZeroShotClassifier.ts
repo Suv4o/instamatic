@@ -8,10 +8,19 @@ interface Payload {
     inputs: string;
 }
 
-export class ImageZeroShotClassifier {
-    constructor(private readonly imageData: Buffer = imageData, private readonly labels: string[] = labels) {}
+interface ImageToLabelResponse {
+    label: string;
+    score: number;
+}
 
-    private async openaiClipVitBasePatch32(payload: string) {
+export class ImageZeroShotClassifier {
+    constructor(
+        private readonly imageData: Buffer = imageData,
+        private readonly labels: string[] = labels,
+        private readonly maxLabels: number = 10
+    ) {}
+
+    private async openaiClipVitBasePatch32(payload: string): Promise<ImageToLabelResponse[]> {
         try {
             let response: Response;
 
@@ -43,13 +52,22 @@ export class ImageZeroShotClassifier {
     }
 
     async analyser() {
-        const payload = {
-            parameters: {
-                candidate_labels: this.labels.slice(0, 10),
-            },
-            inputs: this.imageData.toString("base64"),
-        } as Payload;
-        const result = await this.openaiClipVitBasePatch32(JSON.stringify(payload));
-        return result;
+        const results = [];
+        for (let i = 0; i < this.labels.length; i += this.maxLabels) {
+            const chunk = this.labels.slice(i, i + this.maxLabels);
+            const payload = {
+                parameters: {
+                    candidate_labels: chunk,
+                },
+                inputs: this.imageData.toString("base64"),
+            } as Payload;
+            const result = await this.openaiClipVitBasePatch32(JSON.stringify(payload));
+            results.push(...result);
+        }
+
+        return results
+            .sort((a, b) => b.score - a.score)
+            .slice(0, Math.floor(results.length * 0.4))
+            .map((r) => r.label);
     }
 }
