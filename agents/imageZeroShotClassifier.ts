@@ -68,6 +68,8 @@ export class ImageZeroShotClassifier {
         return results
             .sort((a, b) => b.score - a.score)
             .slice(0, Math.floor(results.length * 0.4))
-            .map((r) => r.label);
+            .map((r) => r.label)
+            .map((label) => `- ${label}`)
+            .join("\n");
     }
 }
