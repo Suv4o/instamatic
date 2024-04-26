@@ -22,8 +22,9 @@ export async function huggingFaceFetch(url: string, body: any) {
     });
 }
 
-export async function loadRandomImage() {
-    return await fs.readFile(path.join(__dirname, "..", "images", await getRandomImageName()));
+export async function loadRandomImage(): Promise<[Buffer, string]> {
+    const randomImageName = await getRandomImageName();
+    return [await fs.readFile(path.join(__dirname, "..", "images", randomImageName)), randomImageName.split(".")[0]];
 }
 
 export async function delay(ms: number) {
