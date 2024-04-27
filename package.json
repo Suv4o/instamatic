@@ -1,7 +1,10 @@
 {
     "name": "instamatic",
     "version": "1.0.0",
-    "description": "",
+    "description": "Experimental project for automating Instagram uploads with Free OpenSource AI to save time and boost productivity",
+    "engines": {
+        "node": "20.x"
+    },
     "main": "index.js",
     "scripts": {
         "start": "node -r ts-node/register --env-file=.env index.ts"

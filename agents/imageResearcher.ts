@@ -18,7 +18,7 @@ export class ImageResearcher {
         return result.answer;
     }
 
-    async research() {
+    async research(): Promise<string> {
         return await this.fetchResults();
     }
 }

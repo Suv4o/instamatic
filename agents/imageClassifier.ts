@@ -10,24 +10,27 @@ export class ImageClassifier {
     }
 
     private async googleVitBasePatch16224() {
+        let response: Response;
+        response = await huggingFaceFetch(
+            "https://api-inference.huggingface.co/models/google/vit-base-patch16-224",
+            this.imageData
+        );
+
+        if (response.ok) {
+            const result = (await response.json()) as ImageToLabelResponse[];
+            return result;
+        }
+
         try {
-            let response: Response;
+            // Try again after 60 seconds because the model might be initializing
+            await delay(60000);
             response = await huggingFaceFetch(
                 "https://api-inference.huggingface.co/models/google/vit-base-patch16-224",
                 this.imageData
             );
-
             if (!response.ok) {
-                // Try again after 60 seconds because the model might be initializing
-                delay(60000);
-                response = await huggingFaceFetch(
-                    "https://api-inference.huggingface.co/models/google/vit-base-patch16-224",
-                    this.imageData
-                );
-                if (!response.ok) {
-                    const resError = await response.json();
-                    throw new Error(resError.error);
-                }
+                const resError = await response.json();
+                throw new Error(resError.error);
             }
 
             const result = (await response.json()) as ImageToLabelResponse[];
@@ -40,24 +43,27 @@ export class ImageClassifier {
     }
 
     private async microsoftResnet50() {
+        let response: Response;
+        response = await huggingFaceFetch(
+            "https://api-inference.huggingface.co/models/microsoft/resnet-50",
+            this.imageData
+        );
+
+        if (response.ok) {
+            const result = (await response.json()) as ImageToLabelResponse[];
+            return result;
+        }
+
         try {
-            let response: Response;
+            // Try again after 60 seconds because the model might be initializing
+            await delay(60000);
             response = await huggingFaceFetch(
                 "https://api-inference.huggingface.co/models/microsoft/resnet-50",
                 this.imageData
             );
-
             if (!response.ok) {
-                // Try again after 60 seconds because the model might be initializing
-                delay(60000);
-                response = await huggingFaceFetch(
-                    "https://api-inference.huggingface.co/models/microsoft/resnet-50",
-                    this.imageData
-                );
-                if (!response.ok) {
-                    const resError = await response.json();
-                    throw new Error(resError.error);
-                }
+                const resError = await response.json();
+                throw new Error(resError.error);
             }
 
             const result = (await response.json()) as ImageToLabelResponse[];
@@ -70,24 +76,24 @@ export class ImageClassifier {
     }
 
     private async nvidiaMitB0() {
+        let response: Response;
+        response = await huggingFaceFetch("https://api-inference.huggingface.co/models/nvidia/mit-b0", this.imageData);
+
+        if (response.ok) {
+            const result = (await response.json()) as ImageToLabelResponse[];
+            return result;
+        }
+
         try {
-            let response: Response;
+            // Try again after 60 seconds because the model might be initializing
+            await delay(60000);
             response = await huggingFaceFetch(
                 "https://api-inference.huggingface.co/models/nvidia/mit-b0",
                 this.imageData
             );
-
             if (!response.ok) {
-                // Try again after 60 seconds because the model might be initializing
-                delay(60000);
-                response = await huggingFaceFetch(
-                    "https://api-inference.huggingface.co/models/nvidia/mit-b0",
-                    this.imageData
-                );
-                if (!response.ok) {
-                    const resError = await response.json();
-                    throw new Error(resError.error);
-                }
+                const resError = await response.json();
+                throw new Error(resError.error);
             }
 
             const result = (await response.json()) as ImageToLabelResponse[];

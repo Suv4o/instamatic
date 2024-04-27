@@ -13,33 +13,37 @@ interface ImageToLabelResponse {
     score: number;
 }
 
-export class ImageZeroShotClassifier {
+export class ZeroShotClassifier {
     constructor(
         private readonly imageData: Buffer = imageData,
         private readonly labels: string[] = labels,
+        private readonly threshold: number = 0.4,
         private readonly maxLabels: number = 10
     ) {}
 
     private async openaiClipVitBasePatch32(payload: string): Promise<ImageToLabelResponse[]> {
-        try {
-            let response: Response;
+        let response: Response;
 
+        response = await huggingFaceFetch(
+            "https://api-inference.huggingface.co/models/openai/clip-vit-base-patch32",
+            payload
+        );
+
+        if (response.ok) {
+            const result = await response.json();
+            return result;
+        }
+
+        try {
+            // Try again after 60 seconds because the model might be initializing
+            await delay(60000);
             response = await huggingFaceFetch(
                 "https://api-inference.huggingface.co/models/openai/clip-vit-base-patch32",
                 payload
             );
-
             if (!response.ok) {
-                // Try again after 60 seconds because the model might be initializing
-                delay(60000);
-                response = await huggingFaceFetch(
-                    "https://api-inference.huggingface.co/models/openai/clip-vit-base-patch32",
-                    payload
-                );
-                if (!response.ok) {
-                    const resError = await response.json();
-                    throw new Error(resError.error);
-                }
+                const resError = await response.json();
+                throw new Error(resError.error);
             }
 
             const result = await response.json();
@@ -51,8 +55,9 @@ export class ImageZeroShotClassifier {
         }
     }
 
-    async analyser() {
+    async analyser(): Promise<string> {
         const results = [];
+
         for (let i = 0; i < this.labels.length; i += this.maxLabels) {
             const chunk = this.labels.slice(i, i + this.maxLabels);
             const payload = {
@@ -67,7 +72,7 @@ export class ImageZeroShotClassifier {
 
         return results
             .sort((a, b) => b.score - a.score)
-            .slice(0, Math.floor(results.length * 0.4))
+            .slice(0, Math.floor(results.length * this.threshold))
             .map((r) => r.label)
             .map((label) => `- ${label}`)
             .join("\n");
