@@ -24,7 +24,9 @@ export class ImageImagineer {
                         ${this.imageLabels}
                         Research findings based on the image title:
                         ${this.imageResearch}
-                        Please provide ten different paragraphs. The output should be a JavaScript array without any additional text at the beginning in the following format:
+                        Please provide ten different paragraphs. Each paragraph should be unique and engaging and should be suitable for an Instagram post.
+                        Also include hashtags related to the image content.
+                        The output should be a JavaScript array without any additional text at the beginning in the following format:
                         [
                             "Paragraph 1",
                             "Paragraph 2",
